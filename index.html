@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GAYO | Asistencia de Estrategia Documental</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Georgia', serif; background-color: #1a0e00; color: #f0e6d3; }
+        header { text-align: center; padding: 40px 20px 20px; background: linear-gradient(180deg, #0d0700 0%, #1a0e00 100%); border-bottom: 2px solid #8b6914; }
+        header img { width: 280px; max-width: 90%; border-radius: 50%; box-shadow: 0 0 30px rgba(139,105,20,0.6); }
+        .tagline { margin-top: 15px; font-size: 0.95rem; color: #c8a84b; font-style: italic; }
+        section { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        h2 { font-size: 1.4rem; color: #c8a84b; border-bottom: 1px solid #8b6914; padding-bottom: 10px; margin-bottom: 25px; text-transform: uppercase; }
+        .sobre-texto { font-size: 1rem; line-height: 1.8; color: #e8d5b7; text-align: justify; }
+        .servicio-card { background: linear-gradient(135deg, #2a1800, #1a0e00); border: 1px solid #8b6914; border-radius: 8px; padding: 25px; margin-bottom: 20px; }
+        .servicio-card h3 { color: #c8a84b; font-size: 1.1rem; margin-bottom: 10px; }
+        .servicio-card p { color: #d4b896; font-size: 0.95rem; line-height: 1.7; margin-bottom: 12px; }
+        .precio { display: inline-block; background: #8b6914; color: #fff8e7; padding: 5px 15px; border-radius: 20px; font-size: 0.9rem; font-weight: bold; }
+        .precio.gratis { background: #1a5c1a; }
+        .nota { font-size: 0.82rem; color: #a08060; margin-top: 8px; font-style: italic; }
+        .pago-section { text-align: center; padding: 30px 20px; background: linear-gradient(135deg, #2a1800, #1a0e00); border: 1px solid #8b6914; border-radius: 8px; max-width: 800px; margin: 0 auto 20px; }
+        .mp-logo { background: #009ee3; color: white; font-size: 1.3rem; font-weight: bold; padding: 12px 30px; border-radius: 8px; display: inline-block; margin-top: 10px; }
+        .pago-texto { color: #d4b896; font-size: 0.95rem; margin-bottom: 15px; }
+        .contacto-section { text-align: center; padding: 30px 20px 50px; max-width: 800px; margin: 0 auto; }
+        .contacto-texto { color: #d4b896; font-size: 0.95rem; margin-bottom: 25px; text-align: left; line-height: 1.7; }
+        .whatsapp-btn { display: inline-flex; align-items: center; gap: 12px; background: #25D366; color: white; text-decoration: none; padding: 15px 35px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; }
+        hr { border: none; border-top: 1px solid #3a2510; max-width: 800px; margin: 0 auto; }
+        footer { text-align: center; padding: 20px; border-top: 1px solid #8b6914; color: #6b5030; font-size: 0.8rem; }
+
+        /* ====== SECCIÓN CHAT IA ====== */
+        .chat-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .chat-intro {
+            color: #d4b896;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .chat-box {
+            background: linear-gradient(135deg, #2a1800, #1a0e00);
+            border: 1px solid #8b6914;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 480px;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            background: #0d0700;
+            border-bottom: 1px solid #8b6914;
+        }
+
+        .chat-header img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #8b6914;
+        }
+
+        .chat-header-info .nombre {
+            font-size: 0.95rem;
+            color: #c8a84b;
+            font-weight: bold;
+        }
+
+        .chat-header-info .estado {
+            font-size: 0.75rem;
+            color: #6b8c4a;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .dot-verde {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #4caf50;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        #chat-mensajes {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            scroll-behavior: smooth;
+        }
+
+        #chat-mensajes::-webkit-scrollbar { width: 4px; }
+        #chat-mensajes::-webkit-scrollbar-track { background: transparent; }
+        #chat-mensajes::-webkit-scrollbar-thumb { background: #5a3a10; border-radius: 2px; }
+
+        .cmsg { max-width: 85%; animation: fadeUp 0.3s ease; }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cmsg.user { align-self: flex-end; }
+        .cmsg.bot { align-self: flex-start; }
+
+        .cbubble {
+            padding: 11px 15px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            font-family: 'Georgia', serif;
+        }
+
+        .user .cbubble {
+            background: #8b6914;
+            color: #fff8e7;
+            border-bottom-right-radius: 3px;
+        }
+
+        .bot .cbubble {
+            background: #2a1800;
+            color: #e8d5b7;
+            border: 1px solid #5a3a10;
+            border-bottom-left-radius: 3px;
+            border-left: 2px solid #c8a84b;
+        }
+
+        .csender {
+            font-size: 0.7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+            color: #6b5030;
+        }
+
+        .user .csender { text-align: right; }
+        .bot .csender { color: #c8a84b; }
+
+        .typing-dots {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            padding: 12px 15px;
+        }
+
+        .typing-dots span {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: #c8a84b;
+            animation: tdots 1.2s infinite;
+        }
+
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes tdots {
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
+            30% { transform: translateY(-6px); opacity: 1; }
+        }
+
+        .chat-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 10px 16px 0;
+        }
+
+        .cchip {
+            background: transparent;
+            border: 1px solid #5a3a10;
+            color: #a08060;
+            font-size: 0.78rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            transition: all 0.2s;
+        }
+
+        .cchip:hover {
+            border-color: #c8a84b;
+            color: #c8a84b;
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 8px;
+            padding: 12px 14px;
+            border-top: 1px solid #3a2510;
+            background: #0d0700;
+            align-items: flex-end;
+        }
+
+        #chat-input {
+            flex: 1;
+            background: #2a1800;
+            border: 1px solid #5a3a10;
+            color: #f0e6d3;
+            border-radius: 10px;
+            padding: 10px 13px;
+            font-family: 'Georgia', serif;
+            font-size: 0.9rem;
+            resize: none;
+            outline: none;
+            max-height: 90px;
+            min-height: 40px;
+            line-height: 1.5;
+            transition: border-color 0.2s;
+        }
+
+        #chat-input:focus { border-color: #c8a84b; }
+        #chat-input::placeholder { color: #5a3a10; }
+
+        #chat-btn {
+            background: #8b6914;
+            border: none;
+            color: #fff8e7;
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.1s;
+            flex-shrink: 0;
+        }
+
+        #chat-btn:hover { background: #c8a84b; }
+        #chat-btn:active { transform: scale(0.95); }
+        #chat-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        #chat-btn svg { width: 17px; height: 17px; }
+
+        .aviso-ia {
+            font-size: 0.75rem;
+            color: #6b5030;
+            text-align: center;
+            padding: 8px 14px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logotipo-gayo.png" alt="GAYO Logo" onerror="this.style.display='none'">
+    <p class="tagline">Del derecho romano a tu contrato</p>
+</header>
+
+<section>
+    <h2>¿Qué es GAYO?</h2>
+    <p class="sobre-texto">GAYO es un servicio de asistencia documental y orientación jurídica accesible, inspirado en el jurista romano Gayo, cuyas Institutas del siglo II d.C. son la base del derecho civil que rige hasta hoy.</p>
+</section>
+
+<hr>
+
+<section>
+    <h2>Servicios</h2>
+    <div class="servicio-card">
+        <h3>📋 Redacción de Contratos</h3>
+        <p>Redactamos tu contrato con respaldo jurídico. Se envía captura o video como prueba antes del pago final.</p>
+        <span class="precio">$2.000</span>
+        <p class="nota">* Se abona seña previa.</p>
+    </div>
+    <div class="servicio-card">
+        <h3>💬 Asesoría Básica</h3>
+        <p>Consultas generales sobre tus derechos en lenguaje simple.</p>
+        <span class="precio gratis">GRATUITA</span>
+    </div>
+    <div class="servicio-card">
+        <h3>⚖️ Asesoría Avanzada</h3>
+        <p>Orientación detallada y análisis documental.</p>
+        <span class="precio">$2.000</span>
+    </div>
+</section>
+
+<hr>
+
+<!-- ====== SECCIÓN CONSULTA IA ====== -->
+<div class="chat-section">
+    <h2>🤖 Consulta Rápida con IA</h2>
+    <p class="chat-intro">Hacé tu consulta legal al instante. Nuestro asistente con inteligencia artificial te orienta sobre derecho argentino de forma gratuita. Para asesoría personalizada, contactanos por WhatsApp.</p>
+
+    <div class="chat-box">
+        <div class="chat-header">
+            <img src="logotipo-gayo.png" alt="GAYO" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 40%22><circle cx=%2220%22 cy=%2220%22 r=%2220%22 fill=%22%238b6914%22/><text x=%2250%25%22 y=%2255%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 font-size=%2218%22 fill=%22%23fff8e7%22>G</text></svg>'">
+            <div class="chat-header-info">
+                <div class="nombre">GAYO Asistente Legal</div>
+                <div class="estado"><span class="dot-verde"></span> en línea</div>
+            </div>
+        </div>
+
+        <div id="chat-mensajes"></div>
+
+        <div class="chat-chips" id="chat-chips">
+            <button class="cchip" onclick="enviarChip(this)">¿Qué es un contrato?</button>
+            <button class="cchip" onclick="enviarChip(this)">Derechos del consumidor</button>
+            <button class="cchip" onclick="enviarChip(this)">Carta documento</button>
+        </div>
+
+        <div class="chat-input-row">
+            <textarea id="chat-input" placeholder="Escribí tu consulta legal..." rows="1"
+                onkeydown="chatTecla(event)" oninput="chatResize(this)"></textarea>
+            <button id="chat-btn" onclick="chatEnviar()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </div>
+        <div class="aviso-ia">⚠️ Las respuestas son orientativas y no reemplazan el asesoramiento profesional.</div>
+    </div>
+</div>
+
+<hr>
+
+<div class="pago-section">
+    <h2>Forma de Pago</h2>
+    <p class="pago-texto">Pagos seguros a través de Mercado Pago.</p>
+    <div class="mp-logo">mercadopago</div>
+</div>
+
+<hr>
+
+<div class="contacto-section">
+    <h2>Contacto</h2>
+    <p class="contacto-texto">Escribinos por WhatsApp para consultas o para iniciar tu trámite.</p>
+    <a href="https://wa.me/5492215856713" class="whatsapp-btn" target="_blank">
+        💬 Escribinos por WhatsApp
+    </a>
+</div>
+
+<footer>
+    <p>© 2025 GAYO | Asistencia de Estrategia Documental — Bases Milenarias | Lógica Jurídica</p>
+</footer>
+
+<script>
+const GROQ_KEY = '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';
+const GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
+const MODELO = 'llama-3.1-8b-instant';
+
+const historial = [];
+
+const SYSTEM = `Sos el asistente legal de GAYO, un servicio de orientación jurídica argentino con sede en La Plata.
+Respondés consultas legales de manera clara, accesible y en español rioplatense (usás "vos").
+Das orientación general sobre derecho argentino (CCyC, derecho laboral, del consumidor, etc.).
+Sos amable, profesional y conciso. Siempre aclarás que tus respuestas son orientativas y no reemplazan el asesoramiento de un abogado.
+Si la consulta es compleja, recomendás contactar a GAYO por WhatsApp para atención personalizada.
+No corrijas la ortografía del usuario ni hagas comentarios sobre cómo escribe.`;
+
+const mensajes = document.getElementById('chat-mensajes');
+const inputEl = document.getElementById('chat-input');
+const btnEl = document.getElementById('chat-btn');
+
+function chatResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 90) + 'px';
+}
+
+function chatTecla(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        chatEnviar();
+    }
+}
+
+function enviarChip(el) {
+    inputEl.value = el.textContent;
+    document.getElementById('chat-chips').style.display = 'none';
+    chatEnviar();
+}
+
+function agregarMsg(texto, tipo) {
+    const div = document.createElement('div');
+    div.className = `cmsg ${tipo}`;
+    div.innerHTML = `
+        <div class="csender">${tipo === 'user' ? 'Vos' : 'GAYO'}</div>
+        <div class="cbubble">${texto.replace(/\n/g, '<br>')}</div>
+    `;
+    mensajes.appendChild(div);
+    mensajes.scrollTop = mensajes.scrollHeight;
+}
+
+function mostrarTyping() {
+    const div = document.createElement('div');
+    div.className = 'cmsg bot';
+    div.id = 'gayo-typing';
+    div.innerHTML = `
+        <div class="csender">GAYO</div>
+        <div class="cbubble typing-dots"><span></span><span></span><span></span></div>
+    `;
+    mensajes.appendChild(div);
+    mensajes.scrollTop = mensajes.scrollHeight;
+}
+
+function quitarTyping() {
+    const t = document.getElementById('gayo-typing');
+    if (t) t.remove();
+}
+
+async function chatEnviar() {
+    const texto = inputEl.value.trim();
+    if (!texto) return;
+
+    document.getElementById('chat-chips').style.display = 'none';
+    inputEl.value = '';
+    inputEl.style.height = 'auto';
+    btnEl.disabled = true;
+
+    agregarMsg(texto, 'user');
+    historial.push({ role: 'user', content: texto });
+    mostrarTyping();
+
+    try {
+        const res = await fetch(GROQ_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${GROQ_KEY}`
+            },
+            body: JSON.stringify({
+                model: MODELO,
+                messages: [{ role: 'system', content: SYSTEM }, ...historial],
+                max_tokens: 800,
+                temperature: 0.7
+            })
+        });
+
+        const data = await res.json();
+        quitarTyping();
+
+        const respuesta = data.choices?.[0]?.message?.content || 'No pude procesar tu consulta. Intentá de nuevo.';
+        agregarMsg(respuesta, 'bot');
+        historial.push({ role: 'assistant', content: respuesta });
+
+    } catch (err) {
+        quitarTyping();
+        agregarMsg('Error de conexión. Revisá tu internet e intentá de nuevo.', 'bot');
+    }
+
+    btnEl.disabled = false;
+    inputEl.focus();
+}
+
+window.onload = () => {
+    agregarMsg('¡Hola! Soy el asistente legal de GAYO. Podés consultarme dudas sobre derecho argentino de forma gratuita. ¿En qué te puedo orientar?', 'bot');
+};
+</script>
+
+</body>
+</html>
